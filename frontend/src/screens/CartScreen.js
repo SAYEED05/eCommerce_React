@@ -10,7 +10,6 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import message from "../components/Message";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import Message from "../components/Message";
 
