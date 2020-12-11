@@ -14,6 +14,7 @@ import {
   userUpdateProfileReducer,
 } from "./reducers/userReducers";
 
+//USING COMBINE REDUCERS METHOD TO COMBINE ALL REDUCERS
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
@@ -24,22 +25,32 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
 });
 
+//GET ITEMS IN CART FROM LOCAL STORAGE
 const cartItemsFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
+//GET USER INFO SAVED BY USER ACTIONS FROM LOCAL STORAGE
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+//GET SHIPPPING ADDRESS SAVED BY CART ACTIONS FROM LOCAL STORAGE
 const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
   ? JSON.parse(localStorage.getItem("shippingAddress"))
   : {};
 
+//GET PAYMENT METHOD SAVED BY CART ACTIONS FROM LOCAL STORAGE
+const paymentMethodFromStorage = localStorage.getItem("paymentMethod")
+  ? JSON.parse(localStorage.getItem("paymentMethod"))
+  : {};
+
+//ASSIGNING WHAT TO LOAD IN INITIALLY IN STATE
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
     shippingAddress: shippingAddressFromStorage,
+    paymentMethod: paymentMethodFromStorage,
   },
   userLogin: { userInfo: userInfoFromStorage },
 };
