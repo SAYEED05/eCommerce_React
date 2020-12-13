@@ -3,6 +3,10 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
   USER_DETAILS_SUCCESS,
+  USER_LIST_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_RESET,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -17,6 +21,8 @@ import {
 } from "../constants/userConstants";
 import axios from "axios";
 import { ORDER_LIST_MY_RESET } from "../constants/orderConstants";
+
+//LOGIN
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -53,13 +59,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const logout = () => (dispatch) => {
-  localStorage.removeItem("userInfo");
-  dispatch({ type: USER_LOGOUT });
-  dispatch({ type: USER_DETAILS_RESET });
-  dispatch({ type: USER_UPDATE_PROFILE_RESET });
-  dispatch({ type: ORDER_LIST_MY_RESET });
-};
+//REGISTER NEW USER
 
 export const register = (name, email, password) => async (dispatch) => {
   try {
@@ -101,6 +101,8 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 };
 
+//GET USER DETAILS
+
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -134,6 +136,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     });
   }
 };
+
+//UPDATE USER PROFILE
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
@@ -174,4 +178,50 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
           : error.message,
     });
   }
+};
+
+//GET ALL USERS (ADMIN ONLY)
+
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_LIST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users`, config);
+
+    dispatch({
+      type: USER_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//LOGOUT
+
+export const logout = () => (dispatch) => {
+  localStorage.removeItem("userInfo");
+  dispatch({ type: USER_LOGOUT });
+  dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: USER_UPDATE_PROFILE_RESET });
+  dispatch({ type: ORDER_LIST_MY_RESET });
+  dispatch({ type: USER_LIST_RESET });
 };
