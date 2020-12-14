@@ -135,8 +135,11 @@ const updateUser = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin === true ? true : false; //The nullish coalescing operator ( ?? ) is a logical operator that returns its right-hand side operand when its left-hand side operand is null or undefined , and otherwise returns its left-hand side operand.
-
+    user.isAdmin =
+      req.body.isAdmin === true
+        ? true
+        : false; /* The nullish coalescing operator ( ?? ) is a logical operator
+     that returns its right-hand side operand when its left-hand side operand is null or undefined , and otherwise returns its left-hand side operand. */
     const updatedUser = await user.save();
 
     res.json({
