@@ -39,11 +39,11 @@ const UserEditScreen = ({ match, history }) => {
         setIsAdmin(user.isAdmin);
       }
     }
-  }, [user, dispatch, successUpdate, userId]);
+  }, [user, dispatch, successUpdate, history, userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ _id: userId, name, email, history, isAdmin }));
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }));
   };
 
   return (
