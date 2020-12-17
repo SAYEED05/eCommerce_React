@@ -87,7 +87,9 @@ const OrderScreen = ({ match, history }) => {
   };
 
   const deliverHandler = () => {
-    dispatch(deliverOrder(order));
+    if (window.confirm("Press ok to mark this order as delivered")) {
+      dispatch(deliverOrder(order));
+    }
   };
 
   return loading ? (
