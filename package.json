@@ -12,11 +12,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
-<<<<<<< HEAD
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
-=======
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
->>>>>>> 321e5e1bc40aaf6e124331339aed3b57f7eaa449
   },
   "author": "sayeed",
   "license": "ISC",
