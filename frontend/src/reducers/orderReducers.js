@@ -20,6 +20,10 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
   ORDER_PAY_SUCCESS,
+  ORDER_CASH_RECEIVED_REQUEST,
+  ORDER_CASH_RECEIVED_SUCCESS,
+  ORDER_CASH_RECEIVED_FAIL,
+  ORDER_CASH_RECEIVED_RESET,
 } from "../constants/orderConstants";
 
 //CREATE ORDER
@@ -119,6 +123,33 @@ export const orderDeliverReducer = (state = {}, action) => {
         error: action.payload,
       };
     case ORDER_DELIVER_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+//CASH RECEIVED REDUCER
+
+export const cashReceivedReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_CASH_RECEIVED_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ORDER_CASH_RECEIVED_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case ORDER_CASH_RECEIVED_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_CASH_RECEIVED_RESET:
       return {};
     default:
       return state;

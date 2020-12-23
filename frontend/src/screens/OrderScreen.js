@@ -10,10 +10,12 @@ import {
   getOrderDetails,
   payOrder,
   deliverOrder,
+  cashReceived,
 } from "../actions/orderActions";
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
+  ORDER_CASH_RECEIVED_RESET,
 } from "../constants/orderConstants";
 
 const OrderScreen = ({ match, history }) => {
@@ -31,6 +33,12 @@ const OrderScreen = ({ match, history }) => {
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { success: successDeliver, loading: loadingDeliver } = orderDeliver;
+
+  const cashReceive = useSelector((state) => state.cashReceive);
+  const {
+    success: successCashReceive,
+    loading: loadingCashReceive,
+  } = cashReceive;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -68,18 +76,37 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay || successDeliver || order._id !== orderId) {
+    if (
+      !order ||
+      successPay ||
+      successDeliver ||
+      successCashReceive ||
+      order._id !== orderId
+    ) {
+      //DISPATCHING RESETS
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
+      dispatch({ type: ORDER_CASH_RECEIVED_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
+        //SHOW PAYPAL WINDOW
         addPayPalScript();
       } else {
         setSdkReady(true);
       }
     }
-  }, [order, successPay, successDeliver, orderId, history, userInfo, dispatch]);
+  }, [
+    //DEPENDENCIES FOR USE_EFFECT
+    order,
+    successPay,
+    successDeliver,
+    successCashReceive,
+    orderId,
+    history,
+    userInfo,
+    dispatch,
+  ]);
 
   const successPaymentHandler = (paymentResult) => {
     //console.log(paymentResult);
@@ -89,6 +116,11 @@ const OrderScreen = ({ match, history }) => {
   const deliverHandler = () => {
     if (window.confirm("Press ok to mark this order as delivered")) {
       dispatch(deliverOrder(order));
+    }
+  };
+  const cashReceivedHandler = () => {
+    if (window.confirm("Press ok to mark this cash received")) {
+      dispatch(cashReceived(order));
     }
   };
 
@@ -239,6 +271,18 @@ const OrderScreen = ({ match, history }) => {
                     </Button>
                   </ListGroup.Item>
                 )}
+              {loadingCashReceive && <Loader />}
+              {userInfo && userInfo.isAdmin && !order.isPaid && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={cashReceivedHandler}
+                  >
+                    Mark As Paid
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

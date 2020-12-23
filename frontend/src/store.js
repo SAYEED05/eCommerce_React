@@ -18,6 +18,7 @@ import {
   orderListMyReducer,
   orderListReducer,
   orderDeliverReducer,
+  cashReceivedReducer,
 } from "./reducers/orderReducers";
 
 import { cartReducer } from "./reducers/cartReducers";
@@ -54,6 +55,8 @@ const reducer = combineReducers({
   orderDeliver: orderDeliverReducer,
   orderListMy: orderListMyReducer,
   orderList: orderListReducer,
+
+  cashReceive: cashReceivedReducer,
 });
 
 //GET ITEMS IN CART FROM LOCAL STORAGE
