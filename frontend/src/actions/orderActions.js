@@ -21,6 +21,7 @@ import {
   ORDER_CASH_RECEIVED_SUCCESS,
   ORDER_CASH_RECEIVED_FAIL,
 } from "../constants/orderConstants";
+import { CART_CLEAR_ITEMS } from "../constants/cartConstants";
 import axios from "axios";
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -44,6 +45,11 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,
+      payload: data,
+    });
+
+    dispatch({
+      type: CART_CLEAR_ITEMS,
       payload: data,
     });
   } catch (error) {
