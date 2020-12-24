@@ -1,4 +1,5 @@
 import Order from "../models/orderModel.js";
+import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 
 const addOrderItems = asyncHandler(async (req, res) => {
@@ -77,9 +78,19 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
-
     const updatedOrder = await order.save();
     res.json(updatedOrder);
+
+    //UPDATE COUNT IN STOCK
+    // ==========================================================
+
+    for (const index in order.orderItems) {
+      const item = order.orderItems[index];
+      const product = await Product.findById(item.product);
+      product.countInStock -= item.qty;
+      await product.save();
+    }
+    // ========================================================
   } else {
     res.status(404);
     throw new Error("Order not found");
